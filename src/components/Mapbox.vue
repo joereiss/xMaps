@@ -7,13 +7,10 @@
 <script>
            
     import Mapbox from 'mapbox-gl-vue';
-    import 'mapbox-gl/dist/mapbox-gl.css';
-
-    //import Mapbox from "mapbox-gl";
+    import 'mapbox-gl/dist/mapbox-gl.css';   
     import { MglMap } from "vue-mapbox";
 
-    //import 'mapbox-gl/dist/mapbox-gl.css';
-
+ 
     //Vue.component('mapbox', require('mapbox-gl-vue/src/components/Mapbox.vue'));
 
     export default {
@@ -23,9 +20,37 @@
         created() {
            // We need to set mapbox-gl library here in order to use it in template
            this.mapbox = Mapbox;
+
+           //let x = this.MglMap;
+
+        //    this.mapbox.addSource('admin-0', {
+        //         type: 'vector',
+        //         url: 'mapbox://mapbox.enterprise-boundaries-a0-v2'
+        //     });
+
+           //this.mapbox.
         },
         mounted() {
-          
+
+            //let x = this.MglMap;
+
+            // this.mapbox.addsource('admin-0', {
+            //     type: 'vector',
+            //         url: 'mapbox://mapbox.enterprise-boundaries-a0-v2'
+            // });
+
+            // MglMap.addsource('admin-0', {
+            //     type: 'vector',
+            //         url: 'mapbox://mapbox.enterprise-boundaries-a0-v2'
+            // });
+
+
+
+          //this.mapbox.resize();
+        
+          // doesn't do anything
+          //this.mapbox.height = 1000;
+          //this.mapbox.width = 1000;
         },
 
         beforeDestroy () {
@@ -52,22 +77,44 @@
                     "name": "Mapbox Streets",
                     "sprite": "mapbox://sprites/mapbox/streets-v8",
                     "glyphs": "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
+                    // "sources":  {
+                    //      "mapbox-streets": {
+                    //          "type": "vector",
+                    //          "url": "mapbox://mapbox.mapbox-streets-v8"
+                    //      }
+
+
                     "sources":  {
-                        "mapbox-streets": {
-                            "type": "vector",
-                            "url": "mapbox://mapbox.mapbox-streets-v6"
-                        }                  
+                         "mapbox-streets": {
+                             "type": "vector",
+                             "url": "mapbox://mapbox.mapbox-streets-v8"
+                         },
+                        "states": {
+                             "type": "geojson",
+                              "data": "https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_110m_admin_1_states_provinces.geojson"
+                         }                                                                                                   
                     },
                    "layers":  [
-                                {
-                                    "id": "water",
-                                    "source": "mapbox-streets",
-                                    "source-layer": "water",
-                                    "type": "fill",
-                                    "paint": {
+                                 {
+                                     "id": "water",
+                                     "source": "mapbox-streets",
+                                     "source-layer": "water",
+                                     "type": "fill",
+                                     "paint": {
                                         "fill-color": "#00ffff"
                                     }
+                                },
+                                {
+                                    "id": "state-borders",
+                                    "type": "line",
+                                    "source": "states",
+                                    "layout": {},
+                                    "paint": {
+                                        "line-color": "#627BC1",
+                                        "line-width": 2
+                                    }
                                 }
+ 
                     ]                                       
                 }
             }              
@@ -93,8 +140,5 @@
 
 
 <style>
-   #map {
-	   width: 750px;
-       height: 500px;
-   }
+   
 </style>
