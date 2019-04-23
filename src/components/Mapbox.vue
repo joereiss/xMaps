@@ -1,10 +1,23 @@
 <template>
     <div id="" style="font-size: 20px;">       
-         <v-btn flat  @click="addMarkerTest()">Add Marker</v-btn>                      
-         <MglMap ref="map" :accessToken="accessToken" :mapStyle="mapStyle">
+         <v-btn flat  @click="addMarkerTest()">Add Marker</v-btn>      
+                         
+         <!-- <MglMap ref="map" :accessToken="accessToken" :mapStyle="mapStyle">
              <MglMarker :coordinates="markerCoordinates"  color='green' />
              <MglMarker :coordinates="markerCoordinates1"  color='red' />
-         </MglMap>                 
+             <MglMarker :coordinates="markerCoordinates2"  color='red' />           
+         </MglMap>    -->
+
+
+         <MglMap ref="map" :accessToken="accessToken" :mapStyle="mapStyle">
+
+             <div v-for="(field, index) in markers" :key="index">  
+                 <MglMarker :coordinates="field"  color='green' />
+             </div>
+                             
+         </MglMap>   
+
+
     </div>    
 </template>
 
@@ -12,8 +25,9 @@
            
     import Mapbox from 'mapbox-gl-vue';
     import 'mapbox-gl/dist/mapbox-gl.css';   
-    import { MglMap } from "vue-mapbox";
-    import { MglMarker } from "vue-mapbox";
+    import { MglMap, MglMarker } from "vue-mapbox";
+    // import { MglMap } from "vue-mapbox";
+    // import { MglMarker } from "vue-mapbox";
 
     //import Vue from 'nativescript-vue';
     //Vue.registerElement("Mapbox", () => require("nativescript-mapbox").MapboxView);
@@ -67,44 +81,27 @@
             //}
         },   
          methods: {                     
-            addMarkerTest() {     
+            getMarkers() {     
                 
-                // https://soal.github.io/vue-mapbox/guide/markers&popups.html#marker
-                //this.markerCoordinates = [];
-                //this.markerCoordinates.push({lng: 74.0060, lat: 40.7128});
-                //this.markerCoordinates.push({lng: 74.0060, lat: 40.7128 });
+               let places = [];
+               places.push([-74.0060, 10.7128]);
+               places.push([-74.0060, 15.7128]);
+               places.push([-74.0060, 20.7128]);
 
-                // this.markerCoordinates.push(74.0060, 45.7128 );
-                //  this.markerCoordinates[1] = [-74.0060, 50.7128 ];
-
-                // {lng: <lng>, lat: <lat>}
-              
-               // This doesn't work 
-               // Instead add to markerCoordinates
-            //    let map = this.$refs.map;
-              
-            //    const mapboxgl = require('mapbox-gl/dist/mapbox-gl');
-        
-            //    var el = document.createElement('div');
-            //    el.className = 'css-icon1';
-
-            //    let that = this;    
-
-            //    new mapboxgl.Marker(el)                        
-            //             .setLngLat( [ 74.0060, 40.7128 ])                       
-            //             .addTo(map);   
-
+               return places;
             }            
         },       
         data() {
             return {
-                accessToken: 'pk.eyJ1IjoianJlaXNzIiwiYSI6ImNqdW9hMmtwbjJ4OG00NG52eXd0d29nM24ifQ.1kVrEs5-wL96vqMvuTUI3w',    
+                accessToken: 'pk.eyJ1IjoianJlaXNzIiwiYSI6ImNqdW9hMmtwbjJ4OG00NG52eXd0d29nM24ifQ.1kVrEs5-wL96vqMvuTUI3w',  
+                markers: this.getMarkers(),  
                 //markerCoordinates: [-74.0060, 40.7128, -74.0060, 47.7128],          
                  //markerCoordinates: [{lng: -74.0060, lat: 40.7128}, {lng: -74.0060, lat: 47.7128}],          
                   //markerCoordinates: [{lat: 40.7128 , lng: -74.0060}, {lat: 47.7128, lng: -74.0060 }],    
                 //markerCoordinates: [[-74.0060, 40.7128 ], [-74.0060, 47.7128]],   
-                  markerCoordinates: [-74.0060, 40.7128 ],    
-                    markerCoordinates1: [-74.0060, 47.7128 ],     
+                 markerCoordinates:  [-74.0060, 40.7128 ],    
+                 markerCoordinates1: [-74.0060, 47.7128 ],     
+                 markerCoordinates2: [-74.0060, 33.7128 ],  
                 //markerCoordinates: [0,0],   
                 mapStyle: {
                     "version": 8,
@@ -188,3 +185,9 @@
 
 
 </style>
+
+
+
+ <!-- <MglMarker :coordinates="markerCoordinates2"  color='blue'>
+                  <v-icon slot="marker">mdi-map-marker</v-icon>
+             </MglMarker> -->
