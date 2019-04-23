@@ -1,16 +1,12 @@
 <template>
   <v-app>
     <v-toolbar app>
-      <v-toolbar-title class="headline text-uppercase">     
-        <span class="font-weight-light">BuildingLink</span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <!-- <v-btn flat  @click="addMarkerTest()">Add Marker</v-btn> -->
+      <span class="font-weight-light">BuildingLink</span>                 
     </v-toolbar>
-
-    <v-content>
-      <!-- <HelloWorld/> -->
-      <Mapbox class="mapElement"/>
+    <v-content app>
+      <v-container fluid>  
+         <Mapbox class="mapElement"/>
+      </v-container>     
     </v-content>
   </v-app>
 </template>
@@ -20,7 +16,7 @@
 import Mapbox from './components/Mapbox.vue';
 
 export default {
-  name: 'App',
+  name: 'app',
   components: {
     //HelloWorld
     Mapbox
@@ -42,13 +38,14 @@ export default {
 </script>
 
 <style>
-/* #app {
+
+#app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; 
   color: #2c3e50;
   margin-top: 60px;
-} */
+}
 
 
 .mapElement {   

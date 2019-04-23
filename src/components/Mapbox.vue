@@ -1,27 +1,12 @@
 <template>
     <div id="" style="font-size: 20px;">       
-         <v-btn flat  @click="addMarkerTest()">Add Marker</v-btn>      
-                         
-         <!-- <MglMap ref="map" :accessToken="accessToken" :mapStyle="mapStyle">
-             <MglMarker :coordinates="markerCoordinates"  color='green' />
-             <MglMarker :coordinates="markerCoordinates1"  color='red' />
-             <MglMarker :coordinates="markerCoordinates2"  color='red' />           
-         </MglMap>    -->
-
-         <!-- this works -->
-         <!-- <MglMap ref="map" :accessToken="accessToken" :mapStyle="mapStyle">
-             <div v-for="(field, index) in markers" :key="index">                 
-                   <MglMarker :coordinates="field"  color='green' />
-             </div>                             
-         </MglMap>    -->
-
-
+         <!-- <v-btn theme-light-info color="info">Add Marker</v-btn>       -->
+                             
           <MglMap ref="map" :accessToken="accessToken" :mapStyle="mapStyle">
              <div v-for="(field, index) in markers" :key="index">  
                  <MglMarker :coordinates="field.coor"  :color="field.color" />                 
              </div>                             
          </MglMap>   
-
 
     </div>    
 </template>
@@ -89,16 +74,7 @@
             getMarkers() {     
                 
                let places = [];
-
-               // this works
-            //    places.push([-74.0060, 10.7128]);
-            //    places.push([-74.0060, 15.7128]);
-            //    places.push([-74.0060, 20.7128]);
-
-            //    places.push([-74.0060, 10.7128],'blue');
-            //    places.push([-74.0060, 15.7128],'blue');
-            //    places.push([-74.0060, 20.7128],'blue');
-
+                      
                places.push({coor: [-74.0060, 10.7128], color: 'blue'});
                places.push({coor: [-74.0060, 30.7128], color: 'red'});
                places.push({coor: [-74.0060, 50.7128], color: 'green'});
@@ -109,15 +85,7 @@
         data() {
             return {
                 accessToken: 'pk.eyJ1IjoianJlaXNzIiwiYSI6ImNqdW9hMmtwbjJ4OG00NG52eXd0d29nM24ifQ.1kVrEs5-wL96vqMvuTUI3w',  
-                markers: this.getMarkers(),  
-                //markerCoordinates: [-74.0060, 40.7128, -74.0060, 47.7128],          
-                 //markerCoordinates: [{lng: -74.0060, lat: 40.7128}, {lng: -74.0060, lat: 47.7128}],          
-                  //markerCoordinates: [{lat: 40.7128 , lng: -74.0060}, {lat: 47.7128, lng: -74.0060 }],    
-                //markerCoordinates: [[-74.0060, 40.7128 ], [-74.0060, 47.7128]],   
-                 markerCoordinates:  [-74.0060, 40.7128 ],    
-                 markerCoordinates1: [-74.0060, 47.7128 ],     
-                 markerCoordinates2: [-74.0060, 33.7128 ],  
-                //markerCoordinates: [0,0],   
+                markers: this.getMarkers(),                 
                 mapStyle: {
                     "version": 8,
                     "name": "Mapbox Streets",
