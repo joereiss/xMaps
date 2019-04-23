@@ -1,30 +1,54 @@
 <template>
-  <div id="app">    
-    BuildingLink 
-    <Mapbox class="mapElement"/>
-  </div>
+  <v-app>
+    <v-toolbar app>
+      <v-toolbar-title class="headline text-uppercase">     
+        <span class="font-weight-light">BuildingLink</span>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <!-- <v-btn flat  @click="addMarkerTest()">Add Marker</v-btn> -->
+    </v-toolbar>
+
+    <v-content>
+      <!-- <HelloWorld/> -->
+      <Mapbox class="mapElement"/>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
-//import HelloWorld from './components/HelloWorld.vue'
-import Mapbox from './components/Mapbox.vue'
+//import HelloWorld from './components/HelloWorld'
+import Mapbox from './components/Mapbox.vue';
 
 export default {
-  name: 'app',
-  components: {   
+  name: 'App',
+  components: {
+    //HelloWorld
     Mapbox
-  }
+  },
+  data () {
+    return {
+      //
+    }
+  },
+   methods: {                     
+      addMarkerTest() {               
+           //let x = this.Mapbox;
+           //let y = x;
+          //this.$root.$emit('IoTToolbarEvent', msg);
+          //this.$root.$emit('msg', msg);
+      }            
+  },      
 }
 </script>
 
 <style>
-#app {
+/* #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; 
   color: #2c3e50;
   margin-top: 60px;
-}
+} */
 
 
 .mapElement {   
@@ -34,6 +58,5 @@ export default {
    width: 100%;
    height: 100%;
 }
-
 
 </style>
