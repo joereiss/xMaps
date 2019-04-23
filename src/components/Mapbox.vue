@@ -8,13 +8,18 @@
              <MglMarker :coordinates="markerCoordinates2"  color='red' />           
          </MglMap>    -->
 
+         <!-- this works -->
+         <!-- <MglMap ref="map" :accessToken="accessToken" :mapStyle="mapStyle">
+             <div v-for="(field, index) in markers" :key="index">                 
+                   <MglMarker :coordinates="field"  color='green' />
+             </div>                             
+         </MglMap>    -->
 
-         <MglMap ref="map" :accessToken="accessToken" :mapStyle="mapStyle">
 
+          <MglMap ref="map" :accessToken="accessToken" :mapStyle="mapStyle">
              <div v-for="(field, index) in markers" :key="index">  
-                 <MglMarker :coordinates="field"  color='green' />
-             </div>
-                             
+                 <MglMarker :coordinates="field.coor"  :color="field.color" />                 
+             </div>                             
          </MglMap>   
 
 
@@ -84,9 +89,19 @@
             getMarkers() {     
                 
                let places = [];
-               places.push([-74.0060, 10.7128]);
-               places.push([-74.0060, 15.7128]);
-               places.push([-74.0060, 20.7128]);
+
+               // this works
+            //    places.push([-74.0060, 10.7128]);
+            //    places.push([-74.0060, 15.7128]);
+            //    places.push([-74.0060, 20.7128]);
+
+            //    places.push([-74.0060, 10.7128],'blue');
+            //    places.push([-74.0060, 15.7128],'blue');
+            //    places.push([-74.0060, 20.7128],'blue');
+
+               places.push({coor: [-74.0060, 10.7128], color: 'blue'});
+               places.push({coor: [-74.0060, 30.7128], color: 'red'});
+               places.push({coor: [-74.0060, 50.7128], color: 'green'});
 
                return places;
             }            
