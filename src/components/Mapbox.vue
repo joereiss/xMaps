@@ -16,12 +16,8 @@
     import Mapbox from 'mapbox-gl-vue';
     import 'mapbox-gl/dist/mapbox-gl.css';   
     import { MglMap, MglMarker } from "vue-mapbox";
-    // import { MglMap } from "vue-mapbox";
-    // import { MglMarker } from "vue-mapbox";
-
-    //import Vue from 'nativescript-vue';
-    //Vue.registerElement("Mapbox", () => require("nativescript-mapbox").MapboxView);
-    //Vue.component('mapbox', require('mapbox-gl-vue/src/components/Mapbox.vue'));
+   
+    const axios = require('axios');
 
     export default {
       
@@ -30,6 +26,10 @@
         created() {
            // We need to set mapbox-gl library here in order to use it in template
            this.mapbox = Mapbox;
+
+           this.$eventHub.$on('Counts', data => {      
+                this.getResidentCountsPerBuilding();                   
+           });
           
         },
         mounted() {
@@ -80,7 +80,25 @@
                places.push({coor: [-74.0060, 50.7128], color: 'green'});
 
                return places;
-            }            
+            },
+            getResidentCountsPerBuilding() {
+
+                let that = this;
+
+                axios.get('http://localhost:3000/getResidentCountsPerBuilding', { params: {facId: 0}}).then((response) => {
+
+                    //console.log(response.data);                 
+                    that.data = response.data;
+                    //this.isLoading = false;
+                    
+                }).catch(error => {
+                    
+                    //console.log(error);
+                    //this.isLoading = false;
+
+                });
+
+            }                    
         },       
         data() {
             return {

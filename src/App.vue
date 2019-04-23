@@ -1,7 +1,10 @@
 <template>
   <v-app>
     <v-toolbar app>
-      <span class="font-weight-light">BuildingLink</span>                 
+      <span class="display-2">BuildingLink</span>   
+      <v-btn flat  @click="sendMessage('ResidentCount')">Resident Counts</v-btn>      
+      <v-btn flat  @click="sendMessage('BulletinBoardCount')">Bulletin Board Counts</v-btn>
+      <v-btn flat  @click="sendMessage('CalendarEventCounts')">Calendar Events</v-btn>     
     </v-toolbar>
     <v-content app>
       <v-container fluid>  
@@ -27,11 +30,8 @@ export default {
     }
   },
    methods: {                     
-      addMarkerTest() {               
-           //let x = this.Mapbox;
-           //let y = x;
-          //this.$root.$emit('IoTToolbarEvent', msg);
-          //this.$root.$emit('msg', msg);
+      sendMessage(msg) {               
+            this.$eventHub.$emit('Counts', msg);
       }            
   },      
 }
