@@ -4,7 +4,7 @@
                              
           <MglMap ref="map" :accessToken="accessToken" :mapStyle="mapStyle">
              <div v-for="(field, index) in markers" :key="index">  
-                 <MglMarker :coordinates="field.coor"  :color="field.color" />                 
+                 <MglMarker :coordinates="field.coor"  :color="field.color" v-on:click="getFacilityDetail()" @click="getFacilityDetail()"  />                 
              </div>                             
          </MglMap>   
 
@@ -81,22 +81,14 @@
                 
                let places = [];
                       
-            //    places.push({coor: [-74.0060, 10.7128], color: 'blue'});
-            //    places.push({coor: [-74.0060, 30.7128], color: 'red'});
-            //    places.push({coor: [-74.0060, 50.7128], color: 'green'});
+               //    places.push({coor: [-74.0060, 10.7128], color: 'blue'});
+               //    places.push({coor: [-74.0060, 30.7128], color: 'red'});
+               //    places.push({coor: [-74.0060, 50.7128], color: 'green'});
 
                places.push({coor: {'lon': -74.0060, 'lat': 10.7128}, color: 'blue'});
                places.push({coor: {'lon': -74.0060, 'lat': 30.7128}, color: 'red'});
                places.push({coor: {'lon': -74.0060, 'lat': 50.7128}, color: 'green'});
-
-            //    places.push({coor: ['-74.0060', '10.7128'], color: 'blue'});
-            //    places.push({coor: ['-74.0060', '30.7128'], color: 'red'});
-            //    places.push({coor: ['-74.0060', '50.7128'], color: 'green'});
-
-            //    places.push([-74.0060, 10.7128, 'blue']);
-            //    places.push([-74.0060, 30.7128, 'red']);
-            //    places.push([-74.0060, 50.7128, 'green']);
-
+        
                return places;
             },
             getResidentCountsPerBuilding() {
@@ -120,7 +112,11 @@
 
                 });
 
-            }                    
+            },    
+            getFacilityDetail() {
+                let x = 0;
+                let y = 0;
+            }                
         },       
         data() {
             return {
@@ -211,7 +207,15 @@
 </style>
 
 
-
+<!-- https://github.com/soal/vue-mapbox/issues/55 -->
  <!-- <MglMarker :coordinates="markerCoordinates2"  color='blue'>
                   <v-icon slot="marker">mdi-map-marker</v-icon>
              </MglMarker> -->
+
+
+
+            <!--   <mgl-popup :coordinates="marker.coords" :anchor="top">
+				  <div><strong>{[marker.text]}</strong></div>
+			  </mgl-popup> -->
+
+          <!--     <mgl-navigation-control position="top-right"></mgl-navigation-control>  -->

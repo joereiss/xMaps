@@ -1,13 +1,31 @@
 <template>
-  <v-app>
+  <v-app dark>
     <v-toolbar app>
-      <span class="display-2">BuildingLink</span>   
+      <!-- <span class="display-2" style="color: yellow;">BuildingLink</span>    -->
       <v-btn flat  @click="sendMessage('ResidentCount')">Resident Counts</v-btn>      
       <v-btn flat  @click="sendMessage('BulletinBoardCount')">Bulletin Board Counts</v-btn>
       <v-btn flat  @click="sendMessage('CalendarEventCounts')">Calendar Events</v-btn>     
     </v-toolbar>
+
+    <v-navigation-drawer app>    
+        <v-toolbar flat class="transparent">
+            <span class="display-2" style="color: yellow;">BuildingLink</span>   
+        </v-toolbar>              
+        
+        <!-- <v-list>			
+          <v-list-tile>
+            <v-list-tile-content>
+                <FacilityDetail/>
+            </v-list-tile-content>          
+          </v-list-tile>							
+        </v-list>        -->
+
+         <FacilityDetail/>
+
+    </v-navigation-drawer>
+
     <v-content style="padding: 0px;" app>
-      <v-container fluid>  
+      <v-container fluid style="padding: 0px;">  
          <Mapbox class="mapElement"/>
       </v-container>     
     </v-content>
@@ -15,13 +33,14 @@
 </template>
 
 <script>
-//import HelloWorld from './components/HelloWorld'
+
 import Mapbox from './components/Mapbox.vue';
+import FacilityDetail from './components/FacilityDetail.vue';
 
 export default {
   name: 'app',
   components: {
-    //HelloWorld
+    FacilityDetail,
     Mapbox
   },
   data () {
