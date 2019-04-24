@@ -8,6 +8,12 @@
              </div>                             
          </MglMap>   
 
+          <!-- <MglMap ref="map" :accessToken="accessToken" :mapStyle="mapStyle">
+             <div v-for="(field, index) in markers" :key="index">  
+                 <MglMarker :coordinates="field"  :color="field.color" />                 
+             </div>                             
+         </MglMap>    -->
+
     </div>    
 </template>
 
@@ -75,25 +81,41 @@
                 
                let places = [];
                       
-               places.push({coor: [-74.0060, 10.7128], color: 'blue'});
-               places.push({coor: [-74.0060, 30.7128], color: 'red'});
-               places.push({coor: [-74.0060, 50.7128], color: 'green'});
+            //    places.push({coor: [-74.0060, 10.7128], color: 'blue'});
+            //    places.push({coor: [-74.0060, 30.7128], color: 'red'});
+            //    places.push({coor: [-74.0060, 50.7128], color: 'green'});
+
+               places.push({coor: {'lon': -74.0060, 'lat': 10.7128}, color: 'blue'});
+               places.push({coor: {'lon': -74.0060, 'lat': 30.7128}, color: 'red'});
+               places.push({coor: {'lon': -74.0060, 'lat': 50.7128}, color: 'green'});
+
+            //    places.push({coor: ['-74.0060', '10.7128'], color: 'blue'});
+            //    places.push({coor: ['-74.0060', '30.7128'], color: 'red'});
+            //    places.push({coor: ['-74.0060', '50.7128'], color: 'green'});
+
+            //    places.push([-74.0060, 10.7128, 'blue']);
+            //    places.push([-74.0060, 30.7128, 'red']);
+            //    places.push([-74.0060, 50.7128, 'green']);
 
                return places;
             },
             getResidentCountsPerBuilding() {
 
                 let that = this;
-
+                
                 axios.get('http://localhost:3000/getResidentCountsPerBuilding', { params: {facId: 0}}).then((response) => {
+                                       
+                    let buildings = ''; 
 
-                    //console.log(response.data);                 
-                    that.data = response.data;
-                    //this.isLoading = false;
-                    
+                    for (var i = 0; i < response.data.length; i++) {
+                        buildings += response.data[i];
+                    }
+                     
+                    that.markers = JSON.parse(buildings);
+                                                        
                 }).catch(error => {
                     
-                    //console.log(error);
+                    console.log(error);
                     //this.isLoading = false;
 
                 });
@@ -103,7 +125,8 @@
         data() {
             return {
                 accessToken: 'pk.eyJ1IjoianJlaXNzIiwiYSI6ImNqdW9hMmtwbjJ4OG00NG52eXd0d29nM24ifQ.1kVrEs5-wL96vqMvuTUI3w',  
-                markers: this.getMarkers(),                 
+                //markers: this.getMarkers(),                 
+                markers: this.getResidentCountsPerBuilding(),  
                 mapStyle: {
                     "version": 8,
                     "name": "Mapbox Streets",

@@ -6,7 +6,7 @@
       <v-btn flat  @click="sendMessage('BulletinBoardCount')">Bulletin Board Counts</v-btn>
       <v-btn flat  @click="sendMessage('CalendarEventCounts')">Calendar Events</v-btn>     
     </v-toolbar>
-    <v-content app>
+    <v-content style="padding: 0px;" app>
       <v-container fluid>  
          <Mapbox class="mapElement"/>
       </v-container>     
