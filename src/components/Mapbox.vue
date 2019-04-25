@@ -1,10 +1,16 @@
 <template>
     <div id="" style="font-size: 20px;">       
          <!-- <v-btn theme-light-info color="info">Add Marker</v-btn>       -->
+
+          <loading :active.sync="isLoading" 
+            :can-cancel="true" 
+            :on-cancel="onCancel"
+            :is-full-page="fullPage">
+          </loading>
                              
-          <MglMap ref="map" :accessToken="accessToken" :mapStyle="mapStyle">
+          <MglMap ref="map" :accessToken="accessToken" :mapStyle="mapStyle" @click="getFacilityDetail2">
              <div v-for="(field, index) in markers" :key="index">  
-                 <MglMarker :coordinates="field.coor"  :color="field.color" v-on:click="getFacilityDetail()" @click="getFacilityDetail()"  />                 
+                 <MglMarker :coordinates="field.coor"  :color="field.color"  />                 
              </div>                             
          </MglMap>   
 
@@ -22,6 +28,9 @@
     import Mapbox from 'mapbox-gl-vue';
     import 'mapbox-gl/dist/mapbox-gl.css';   
     import { MglMap, MglMarker } from "vue-mapbox";
+
+    import Loading from 'vue-loading-overlay';   
+    import 'vue-loading-overlay/dist/vue-loading.css';
    
     const axios = require('axios');
 
@@ -68,7 +77,7 @@
         //mixins: [MockServer],
 
         components: {
-           MglMap, MglMarker           
+           MglMap, MglMarker,Loading           
         },
 
         props: {
@@ -77,6 +86,9 @@
             //}
         },   
          methods: {                     
+            onCancel() {                             
+                console.log("Loader Cancel "); 
+            }, 
             getMarkers() {     
                 
                let places = [];
@@ -93,6 +105,7 @@
             },
             getResidentCountsPerBuilding() {
 
+                this.isLoading = true;
                 let that = this;
                 
                 axios.get('http://localhost:3000/getResidentCountsPerBuilding', { params: {facId: 0}}).then((response) => {
@@ -104,22 +117,33 @@
                     }
                      
                     that.markers = JSON.parse(buildings);
+                     this.isLoading = false;
                                                         
                 }).catch(error => {
                     
                     console.log(error);
-                    //this.isLoading = false;
+                    this.isLoading = false;
 
                 });
 
             },    
-            getFacilityDetail() {
+            getFacilityDetail(map, e) {
                 let x = 0;
                 let y = 0;
-            }                
+            },
+            getFacilityDetail1() {
+                let x = 0;
+                let y = 0;
+            },
+             getFacilityDetail2(a,b,c,d) {
+                let x = 0;
+                let y = 0;
+            }                        
         },       
         data() {
             return {
+                fullPage: true,
+                isLoading: false,
                 accessToken: 'pk.eyJ1IjoianJlaXNzIiwiYSI6ImNqdW9hMmtwbjJ4OG00NG52eXd0d29nM24ifQ.1kVrEs5-wL96vqMvuTUI3w',  
                 //markers: this.getMarkers(),                 
                 markers: this.getResidentCountsPerBuilding(),  
@@ -152,7 +176,8 @@
                                 "type": "fill",
                                 "paint": {
                                     "fill-color": "#00ffff"
-                                }
+                                },
+                               "@click" : "getFacilityDetail2()",
                             },
                             {
                                 "id": "state-borders",
@@ -164,7 +189,7 @@
                                     "line-width": 2
                                 }
                             },
-                            {
+                            {                         
                             "id": "admin-0-map-units-borders",
                             "type": "line",
                             "source": "admin-0-map-units",
@@ -172,7 +197,9 @@
                             "paint": {
                                 "line-color": "#627BC1",
                                 "line-width": 2
-                            }
+                            },
+
+                           
                     }]                                       
                 }
             }              
