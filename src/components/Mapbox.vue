@@ -8,9 +8,9 @@
             :is-full-page="fullPage">
           </loading>
                              
-          <MglMap ref="map" :accessToken="accessToken" :mapStyle="mapStyle" @click="getFacilityDetail2">
+          <MglMap ref="map" :accessToken="accessToken" :mapStyle="mapStyle"  >
              <div v-for="(field, index) in markers" :key="index">  
-                 <MglMarker :coordinates="field.coor"  :color="field.color"  />                 
+                 <MglMarker :coordinates="field.coor"  :color="field.color"  @added="markerAdded"/>                 
              </div>                             
          </MglMap>   
 
@@ -138,7 +138,22 @@
              getFacilityDetail2(a,b,c,d) {
                 let x = 0;
                 let y = 0;
-            }                        
+            },
+            getFacilityDetail3(a,b,c,d) {
+                let x = 0;
+                let y = 0;
+            },
+           markerAdded(el) {
+                let marker = el.marker;
+                let el1 = el.marker.getElement();
+
+               
+                el1.addEventListener('click', function() {
+                   //window.alert(marker.properties.message);
+                    let x = marker;
+                    let y = 0;
+                });
+            },                             
         },       
         data() {
             return {
@@ -176,8 +191,7 @@
                                 "type": "fill",
                                 "paint": {
                                     "fill-color": "#00ffff"
-                                },
-                               "@click" : "getFacilityDetail2()",
+                                }                              
                             },
                             {
                                 "id": "state-borders",
