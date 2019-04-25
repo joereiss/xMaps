@@ -21,6 +21,8 @@
          </MglMap>    -->
 
     </div>    
+
+
 </template>
 
 <script>
@@ -49,6 +51,7 @@
         },
         mounted() {
 
+            this.markers =  this.getResidentCountsPerBuilding();
             //let x = this.MglMap;
 
             // this.mapbox.addsource('admin-0', {
@@ -127,27 +130,27 @@
                 });
 
             },    
-            getFacilityDetail(map, e) {
-                let x = 0;
-                let y = 0;
-            },
-            getFacilityDetail1() {
-                let x = 0;
-                let y = 0;
-            },
-             getFacilityDetail2(a,b,c,d) {
-                let x = 0;
-                let y = 0;
-            },
-            getFacilityDetail3(a,b,c,d) {
-                let x = 0;
-                let y = 0;
-            },
-           markerAdded(el) {
+            // getFacilityDetail(map, e) {
+            //     let x = 0;
+            //     let y = 0;
+            // },
+            // getFacilityDetail1() {
+            //     let x = 0;
+            //     let y = 0;
+            // },
+            // getFacilityDetail2(a,b,c,d) {
+            //     let x = 0;
+            //     let y = 0;
+            // },
+            // getFacilityDetail3(a,b,c,d) {
+            //     let x = 0;
+            //     let y = 0;
+            // },
+            markerAdded(el) {
                 //let marker = el.marker;
+
                 let el1 = el.marker.getElement();
                 let facid = el.component.$el.id; 
-
                 let that = this;
                
                 el1.addEventListener('click', function(event) {                
@@ -166,7 +169,8 @@
                 isLoading: false,
                 accessToken: 'pk.eyJ1IjoianJlaXNzIiwiYSI6ImNqdW9hMmtwbjJ4OG00NG52eXd0d29nM24ifQ.1kVrEs5-wL96vqMvuTUI3w',  
                 //markers: this.getMarkers(),                 
-                markers: this.getResidentCountsPerBuilding(),  
+                //markers: this.getResidentCountsPerBuilding(),  
+                markers: [], // this.getResidentCountsPerBuilding(),  
                 mapStyle: {
                     "version": 8,
                     "name": "Mapbox Streets",

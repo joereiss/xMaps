@@ -26,9 +26,14 @@
 
     <v-content style="padding: 0px;" app>
       <v-container fluid style="padding: 0px;">  
-         <Mapbox class="mapElement"/>
+         <Mapbox class="mapElement"/>    
       </v-container>     
     </v-content>
+
+      <v-footer app height="auto" style="background-color: #424242;">        
+     </v-footer>
+
+
   </v-app>
 </template>
 
