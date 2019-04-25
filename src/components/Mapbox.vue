@@ -10,7 +10,7 @@
                              
           <MglMap ref="map" :accessToken="accessToken" :mapStyle="mapStyle"  >
              <div v-for="(field, index) in markers" :key="index">  
-                 <MglMarker :coordinates="field.coor"  :color="field.color"  @added="markerAdded"/>                 
+                 <MglMarker :coordinates="field.coor"  :color="field.color" :id="field.facid" :define-custom-id="field.facid" @added="markerAdded"/>                 
              </div>                             
          </MglMap>   
 
@@ -146,12 +146,26 @@
            markerAdded(el) {
                 let marker = el.marker;
                 let el1 = el.marker.getElement();
+                let facid = el.component.$el.id; 
 
+                let that = this;
                
-                el1.addEventListener('click', function() {
+                el1.addEventListener('click', function(event) {
                    //window.alert(marker.properties.message);
-                    let x = marker;
-                    let y = 0;
+                    //let facid = marker;
+
+                   //let z = this.getAttribute("define-custom-id");
+
+                    let y = facid;
+
+                   that.markers.find(function(x) {
+                          if (x.facid == facid) {
+                              return x;
+                          }
+       
+                     });
+
+
                 });
             },                             
         },       
