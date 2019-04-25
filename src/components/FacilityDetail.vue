@@ -3,48 +3,25 @@
        
 
       <v-card>
-         <v-card-title raised="true" class="headline text-xs-center">Facility</v-card-title>
+         <v-card-title raised="true" class="headline text-xs-center" style="color: cornflowerblue;">Facility</v-card-title>
+
          <v-card-text>
+            <p class="subheading text-lg-left">{{facName}}</p> 
+            <p class="subheading text-lg-left">{{facAddr1}}</p> 
+            <p class="subheading text-lg-left">{{facCityStateZip}}</p>                      
+        </v-card-text>
 
-            <v-layout align-center row hide-details>
-                <v-flex xs3>
-                    <v-subheader>Facility Name</v-subheader>
-                </v-flex>
-                <v-flex xs9>
-                    <v-text-field
-                        readonly  
-                         v-bind:value="facilityName"
-                    >                   
-                    </v-text-field>
-                </v-flex>
-            </v-layout>
+      </v-card>
 
-            <v-layout align-center row hide-details>
-                <v-flex xs3>
-                    <v-subheader>Adress</v-subheader>
-                </v-flex>
-                <v-flex xs9>
-                    <v-text-field
-                        readonly  
-                    >
-                    yyyyyyyy
-                    </v-text-field>
-                </v-flex>
-            </v-layout>
-
-             <v-layout align-center row hide-details>
-                <v-flex xs3>
-                    <v-subheader>User Count</v-subheader>
-                </v-flex>
-                <v-flex xs9>
-                    <v-text-field
-                        readonly  
-                    >
-                    10000
-                    </v-text-field>
-                </v-flex>
-            </v-layout>
-
+       <v-card>
+         <v-card-title raised="true" class="headline text-xs-center" style="color: cornflowerblue;">Users</v-card-title>
+         <v-card-text>
+           
+            <div style="display: flex;">
+              <h4 class="subheading text-lg-left" style="color: white; padding-right: 5px;">All Users</h4>
+              <div class="subheading text-lg-right"> {{ userCount }} </div>
+            </div>
+            
         </v-card-text>
 
       </v-card>
@@ -71,7 +48,10 @@
            });
 
            this.$eventHub.$on('FacilityDetail', data => {      
-                this.facilityName = data;
+                this.facName = data.facName;
+                this.facAddr1 = data.facAddress;
+                this.facCityStateZip = data.facCityStateZip;
+                this.userCount = data.personCount;
            });
           
         },
@@ -134,7 +114,10 @@
         },       
         data() {
             return {
-                facilityName: 'Nothing Selected',  
+                facName: 'Nothing Selected',  
+                facAddr1: '',  
+                facCityStateZip: '',
+                userCount: 0
                 //markers: this.getMarkers(),                                                   
             }              
         },    

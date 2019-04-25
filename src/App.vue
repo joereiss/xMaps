@@ -9,7 +9,7 @@
 
     <v-navigation-drawer app>    
         <v-toolbar flat class="transparent">
-            <span class="display-2" style="color: yellow;">BuildingLink</span>   
+            <span class="display-1" style="color: yellow;">BattleBuildings</span>   
         </v-toolbar>              
         
         <!-- <v-list>			

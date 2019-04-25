@@ -151,9 +151,9 @@
                 let that = this;
                
                 el1.addEventListener('click', function(event) {                
-                    that.markers.find(function(x) {
-                        if (x.facid == facid) {
-                            that.$eventHub.$emit('FacilityDetail', x.facName);
+                    that.markers.find(function(facility) {
+                        if (facility.facid == facid) {
+                            that.$eventHub.$emit('FacilityDetail', facility);
                             //return x;
                         }       
                     });
