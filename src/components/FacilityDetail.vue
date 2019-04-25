@@ -13,8 +13,8 @@
                 <v-flex xs9>
                     <v-text-field
                         readonly  
-                    >
-                    xxxxxxxx
+                         v-bind:value="facilityName"
+                    >                   
                     </v-text-field>
                 </v-flex>
             </v-layout>
@@ -68,6 +68,10 @@
                    
            this.$eventHub.$on('Counts', data => {      
                 this.getResidentCountsPerBuilding();                   
+           });
+
+           this.$eventHub.$on('FacilityDetail', data => {      
+                this.facilityName = data;
            });
           
         },
@@ -130,7 +134,7 @@
         },       
         data() {
             return {
-                x: '',  
+                facilityName: 'Nothing Selected',  
                 //markers: this.getMarkers(),                                                   
             }              
         },    

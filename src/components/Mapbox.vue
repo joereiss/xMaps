@@ -144,28 +144,19 @@
                 let y = 0;
             },
            markerAdded(el) {
-                let marker = el.marker;
+                //let marker = el.marker;
                 let el1 = el.marker.getElement();
                 let facid = el.component.$el.id; 
 
                 let that = this;
                
-                el1.addEventListener('click', function(event) {
-                   //window.alert(marker.properties.message);
-                    //let facid = marker;
-
-                   //let z = this.getAttribute("define-custom-id");
-
-                    let y = facid;
-
-                   that.markers.find(function(x) {
-                          if (x.facid == facid) {
-                              return x;
-                          }
-       
-                     });
-
-
+                el1.addEventListener('click', function(event) {                
+                    that.markers.find(function(x) {
+                        if (x.facid == facid) {
+                            that.$eventHub.$emit('FacilityDetail', x.facName);
+                            //return x;
+                        }       
+                    });
                 });
             },                             
         },       
