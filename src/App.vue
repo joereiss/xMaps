@@ -9,29 +9,37 @@
 
     <v-navigation-drawer app>    
         <v-toolbar flat class="transparent">
-            <span class="display-1" style="color: yellow;">BattleBuildings</span>   
+            <span class="display-1" style="color: yellow;">BuildingLink</span>   
         </v-toolbar>              
-        
-        <!-- <v-list>			
-          <v-list-tile>
-            <v-list-tile-content>
-                <FacilityDetail/>
-            </v-list-tile-content>          
-          </v-list-tile>							
-        </v-list>        -->
-
+              
          <FacilityDetail/>
+
+        <!-- <v-footer app height="auto" style="background-color: #424242;">       
+          <MapControls/> 
+        </v-footer> -->
+
+        <!-- <FooterArea>                  
+        </FooterArea>     -->
 
     </v-navigation-drawer>
 
     <v-content style="padding: 0px;" app>
       <v-container fluid style="padding: 0px;">  
          <Mapbox class="mapElement" style="cursor: pointer;"/>    
-      </v-container>     
+      </v-container> 
+
+      <v-footer app height="auto" style="background-color: #424242;">       
+         <!-- <MapControls/>  -->
+      </v-footer>
+
     </v-content>
 
-    <v-footer app height="auto" style="background-color: #424242;">        
+    <v-footer app height="auto" style="background-color: #424242;">       
+      <!-- <MapControls/>  -->
     </v-footer>
+
+      <!-- <v-footer app height="auto">        
+    </v-footer> -->
 
   </v-app>
 </template>
@@ -40,12 +48,12 @@
 
 import Mapbox from './components/Mapbox.vue';
 import FacilityDetail from './components/FacilityDetail.vue';
+import MapControls from './components/MapControls.vue';
 
 export default {
   name: 'app',
   components: {
-    FacilityDetail,
-    Mapbox
+    FacilityDetail,MapControls,Mapbox
   },
   data () {
     return {

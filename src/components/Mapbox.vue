@@ -48,12 +48,27 @@
                 this.getResidentCountsPerBuilding();                   
            });
 
-           this.$eventHub.$on('StreetView', data => {      
+           this.$eventHub.$on('ZoomIn', data => {      
                 
                 let map1 = that.$refs.map;
                 map1.actions.flyTo({               
                    center: data,
-                   zoom: 15,
+                   zoom: 20,
+                   bearing: 0,
+                   speed: 0.2,
+                   curve: 1,
+                   easing: function(t) {return t;}
+                })
+               
+                //this.mapbox.showUserLocation(true);                  
+           });
+
+           this.$eventHub.$on('ZoomOut', data => {      
+                
+                let map1 = that.$refs.map;
+                map1.actions.flyTo({               
+                   center: data,
+                   zoom: 2,
                    bearing: 0,
                    speed: 0.2,
                    curve: 1,
@@ -172,11 +187,13 @@
                     "glyphs": "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
                     
                     // http://geojson.xyz/  
+                    // https://docs.mapbox.com/vector-tiles/reference/mapbox-streets-v8/#overview
 
                     "sources":  {
                          "mapbox-streets": {
                              "type": "vector",
-                             "url": "mapbox://mapbox.mapbox-streets-v8"
+                              "url": "mapbox://mapbox.mapbox-streets-v8"
+                              //"url": "http://a.tiles.mapbox.com/v4/mapbox.mapbox-streets-v7/14/4823/6160.mvt"
                          },
                         "states": {
                              "type": "geojson",
@@ -187,8 +204,109 @@
                               "data": "https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_110m_admin_0_map_units.geojson"
                          }                                                                                                           
                     },
-                   "layers":  [{
-                                "id": "water",
+                   "layers":  [
+
+
+                            {
+                                "id": "admin",
+                                "source": "mapbox-streets",
+                                "source-layer": "admin",
+                                "type": "line",
+                                "paint": {
+                                   "line-color": "#ffffff"
+                                }
+                            },
+                            {
+                                "id": "road",
+                                "source": "mapbox-streets",
+                                "source-layer": "road",
+                                "type": "line",
+                                "paint": {
+                                     "line-color": "#ffffff"
+                                }
+                            },
+                            {
+                                "id": "landuse",
+                                "source": "mapbox-streets",
+                                "source-layer": "landuse",
+                                "type": "fill",
+                                "paint": {
+                                    "fill-color": "rgba(66,100,251, 0.3)",
+                                    "fill-outline-color": "rgba(66,100,251, 1)"
+                                }
+                            },
+                            {
+                                "id": "place_label",
+                                "source": "mapbox-streets",
+                                "source-layer": "place_label",
+                                "type": "circle",
+                                "paint": {
+                                    "circle-radius": 3,
+                                    "circle-color": "rgba(238,78,139, 0.4)",
+                                    "circle-stroke-color": "rgba(238,78,139, 1)",
+                                    "circle-stroke-width": 1
+                                }
+                            },
+                            {
+                                "id": "structure",
+                                "source": "mapbox-streets",
+                                "source-layer": "structure",
+                                "type": "fill",
+                                "paint": {
+                                    "fill-color": "rgba(66,100,251, 0.3)",
+                                    "fill-outline-color": "rgba(66,100,251, 1)"
+                                }
+                            },
+                            {
+                                "id": "housenum_label",
+                                "source": "mapbox-streets",
+                                "source-layer": "housenum_label",
+                                "type": "circle",
+                                "paint": {
+                                    "circle-radius": 3,
+                                    "circle-color": "rgba(238,78,139, 0.4)",
+                                    "circle-stroke-color": "rgba(238,78,139, 1)",
+                                    "circle-stroke-width": 1
+                                }
+                            },
+                            {
+                                "id": "poi_label",
+                                "source": "mapbox-streets",
+                                "source-layer": "poi_label",
+                                "type": "circle",
+                                "paint": {
+                                    "circle-radius": 3,
+                                    "circle-color": "rgba(238,78,139, 0.4)",
+                                    "circle-stroke-color": "rgba(238,78,139, 1)",
+                                    "circle-stroke-width": 1
+                                }
+                            },
+                            {
+                                "id": "transit_stop_label",
+                                "source": "mapbox-streets",
+                                "source-layer": "transit_stop_label",
+                                "type": "circle",
+                                "paint": {
+                                    "circle-radius": 3,
+                                    "circle-color": "rgba(238,78,139, 0.4)",
+                                    "circle-stroke-color": "rgba(238,78,139, 1)",
+                                    "circle-stroke-width": 1
+                                }
+                            },
+                            {
+                                "id": "building",
+                                "source": "mapbox-streets",
+                                "source-layer": "building",
+                                 "type": "fill",
+                                //"type": "building:part",
+                                //"type": "name",
+                                "paint": {
+                                    "fill-color": "rgba(66,100,251, 0.3)",
+                                    "fill-outline-color": "rgba(66,100,251, 1)"
+                                }
+                            },
+                            {
+                                "id": "water",                               
                                 "source": "mapbox-streets",
                                 "source-layer": "water",
                                 "type": "fill",
@@ -207,13 +325,13 @@
                                 }
                             },
                             {                         
-                            "id": "admin-0-map-units-borders",
-                            "type": "line",
-                            "source": "admin-0-map-units",
-                            "layout": {},
-                            "paint": {
-                                "line-color": "#627BC1",
-                                "line-width": 2
+                                "id": "admin-0-map-units-borders",
+                                "type": "line",
+                                "source": "admin-0-map-units",
+                                "layout": {},
+                                "paint": {
+                                    "line-color": "#627BC1",
+                                    "line-width": 2
                             },
 
                            

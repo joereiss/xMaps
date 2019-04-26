@@ -1,33 +1,28 @@
 <template>
     <div id="FacilityDetail" style="font-size: 20px;">       
        
-
       <v-card>
          <v-card-title raised="true" class="headline text-xs-center" style="color: cornflowerblue;">Facility</v-card-title>
-
-         <v-card-text>
+         <v-card-text> 
             <p class="subheading text-lg-left">{{facName}}</p> 
             <p class="subheading text-lg-left">{{facAddr1}}</p> 
             <p class="subheading text-lg-left">{{facCityStateZip}}</p>                      
-        </v-card-text>
-
-        <v-card-actions class="text-md-center">
-             <v-btn raised  @click="getStreetView()">Street View</v-btn>
-        </v-card-actions>
-
+         </v-card-text>
+         <v-card-actions class="text-md-center">            
+            <v-btn raised  @click="setZoomIn()" style="width: 50px;" >Zoom In</v-btn>
+            <v-btn raised  @click="setZoomOut()">Zoom Out</v-btn>
+            <v-btn raised  @click="getFacilityImages()">Images</v-btn>          
+         </v-card-actions>
       </v-card>
 
        <v-card>
-         <v-card-title raised="true" class="headline text-xs-center" style="color: cornflowerblue;">Users</v-card-title>
-         <v-card-text>
-           
+         <v-card-title raised="true" class="headline text-xs-center" style="color: cornflowerblue;">Users</v-card-title>         
+         <v-card-text>           
             <div style="display: flex;">
               <h4 class="subheading text-lg-left" style="color: white; padding-right: 5px;">All Users</h4>
               <div class="subheading text-lg-right"> {{ userCount }} </div>
-            </div>
-            
+            </div>            
         </v-card-text>
-
       </v-card>
 
     </div>    
@@ -82,9 +77,15 @@
          methods: {       
              
              
-            getStreetView() {
-                this.$eventHub.$emit('StreetView', this.coord); 
+            setZoomIn() {
+                this.$eventHub.$emit('ZoomIn', this.coord); 
             }, 
+            setZoomOut() {
+                this.$eventHub.$emit('ZoomOut', this.coord); 
+            }, 
+            getFacilityImages() {
+
+            },
             getFacilityDetail() {     
                 
                let places = [];
@@ -142,7 +143,32 @@
 
 <style>
    
+#container {
+  width: 80%;
+  margin: 0 auto;
+}
 
+.Card {
+  margin: 10px;
+  padding: 0px;
+}
+
+
+.btn {
+  min-width: 10px;
+}
+
+div.btn__content {
+  padding-left: 16px;
+}
+
+div.card__title {
+  padding-left: 0px;
+}
+
+div.card__actions {
+  padding-left: 0px;
+}
 
 </style>
 
