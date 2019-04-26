@@ -8,7 +8,7 @@
             :is-full-page="fullPage">
           </loading>
                              
-          <MglMap ref="map" :accessToken="accessToken" :mapStyle="mapStyle"  >
+          <MglMap ref="map" :accessToken="accessToken" :mapStyle="mapStyle"  @load="onMapLoad" >    
              <div v-for="(field, index) in markers" :key="index">  
                  <MglMarker :coordinates="field.coor"  :color="field.color" :id="field.facid" :define-custom-id="field.facid" @added="markerAdded"/>                 
              </div>                             
@@ -30,7 +30,6 @@
     import Mapbox from 'mapbox-gl-vue';
     import 'mapbox-gl/dist/mapbox-gl.css';   
     import { MglMap, MglMarker } from "vue-mapbox";
-
     import Loading from 'vue-loading-overlay';   
     import 'vue-loading-overlay/dist/vue-loading.css';
    
@@ -43,34 +42,33 @@
         created() {
            // We need to set mapbox-gl library here in order to use it in template
            this.mapbox = Mapbox;
+           let that = this;
 
            this.$eventHub.$on('Counts', data => {      
                 this.getResidentCountsPerBuilding();                   
+           });
+
+           this.$eventHub.$on('StreetView', data => {      
+                
+                let map1 = that.$refs.map;
+                map1.actions.flyTo({               
+                   center: data,
+                   zoom: 15,
+                   bearing: 0,
+                   speed: 0.2,
+                   curve: 1,
+                   easing: function(t) {return t;}
+                })
+               
+                //this.mapbox.showUserLocation(true);                  
            });
           
         },
         mounted() {
 
-            this.markers =  this.getResidentCountsPerBuilding();
-            //let x = this.MglMap;
-
-            // this.mapbox.addsource('admin-0', {
-            //     type: 'vector',
-            //         url: 'mapbox://mapbox.enterprise-boundaries-a0-v2'
-            // });
-
-            // MglMap.addsource('admin-0', {
-            //     type: 'vector',
-            //         url: 'mapbox://mapbox.enterprise-boundaries-a0-v2'
-            // });
-
-
-
-          //this.mapbox.resize();
-        
-          // doesn't do anything
-          //this.mapbox.height = 1000;
-          //this.mapbox.width = 1000;
+            //this.markers =  this.getResidentCountsPerBuilding();
+            this.getResidentCountsPerBuilding();
+           
         },
 
         beforeDestroy () {
@@ -120,48 +118,44 @@
                     }
                      
                     that.markers = JSON.parse(buildings);
-                     this.isLoading = false;
+                    that.isLoading = false;
                                                         
                 }).catch(error => {
                     
                     console.log(error);
-                    this.isLoading = false;
+                    that.isLoading = false;
 
                 });
 
-            },    
-            // getFacilityDetail(map, e) {
-            //     let x = 0;
-            //     let y = 0;
-            // },
-            // getFacilityDetail1() {
-            //     let x = 0;
-            //     let y = 0;
-            // },
-            // getFacilityDetail2(a,b,c,d) {
-            //     let x = 0;
-            //     let y = 0;
-            // },
-            // getFacilityDetail3(a,b,c,d) {
-            //     let x = 0;
-            //     let y = 0;
-            // },
+            },               
             markerAdded(el) {
-                //let marker = el.marker;
-
+                
                 let el1 = el.marker.getElement();
                 let facid = el.component.$el.id; 
                 let that = this;
                
-                el1.addEventListener('click', function(event) {                
+                //el1.addEventListener('click', function(event) {   
+                el1.addEventListener('click', (event) => { 
+                    that.isLoading = true;             
                     that.markers.find(function(facility) {
                         if (facility.facid == facid) {
-                            that.$eventHub.$emit('FacilityDetail', facility);
-                            //return x;
+                            that.isLoading = false;
+                            that.$eventHub.$emit('FacilityDetail', facility);                           
                         }       
                     });
                 });
-            },                             
+            },     
+            // onMapLoaded(event) {
+            //     this.isLoading = false;        
+            //     console.log('map loaded');       
+            // },
+            async onMapLoad(event) {
+
+                const asyncActions = event.component.actions;
+
+                this.isLoading = false;   
+                console.log('map loaded - ' + asyncActions);                  
+            }                                   
         },       
         data() {
             return {

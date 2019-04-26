@@ -11,6 +11,10 @@
             <p class="subheading text-lg-left">{{facCityStateZip}}</p>                      
         </v-card-text>
 
+        <v-card-actions class="text-md-center">
+             <v-btn raised  @click="getStreetView()">Street View</v-btn>
+        </v-card-actions>
+
       </v-card>
 
        <v-card>
@@ -52,6 +56,7 @@
                 this.facAddr1 = data.facAddress;
                 this.facCityStateZip = data.facCityStateZip;
                 this.userCount = data.personCount;
+                this.coord = data.coor;
            });
           
         },
@@ -74,7 +79,12 @@
             //    type: String
             //}
         },   
-         methods: {                     
+         methods: {       
+             
+             
+            getStreetView() {
+                this.$eventHub.$emit('StreetView', this.coord); 
+            }, 
             getFacilityDetail() {     
                 
                let places = [];
@@ -117,7 +127,8 @@
                 facName: 'Nothing Selected',  
                 facAddr1: '',  
                 facCityStateZip: '',
-                userCount: 0
+                userCount: 0,
+                coor: []
                 //markers: this.getMarkers(),                                                   
             }              
         },    
