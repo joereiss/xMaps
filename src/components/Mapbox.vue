@@ -11,8 +11,19 @@
           <MglMap ref="map" :accessToken="accessToken" :mapStyle="mapStyle"  @load="onMapLoad" >    
              <div v-for="(field, index) in markers" :key="index">  
                  <MglMarker :coordinates="field.coor"  :color="field.color" :id="field.facid" :define-custom-id="field.facid" @added="markerAdded"/>                 
-             </div>                             
+             </div>       
+
+
+            <div id="streetView" v-if="isImageAvailable" style="z-index=100000">
+                <!-- <span v-html="streetViewImage"></span> -->
+                <h3>Google Image</h3>
+                <img src="streetViewImage" />
+            </div>
+
+
          </MglMap>   
+         
+         
 
           <!-- <MglMap ref="map" :accessToken="accessToken" :mapStyle="mapStyle">
              <div v-for="(field, index) in markers" :key="index">  
@@ -50,16 +61,17 @@
 
            this.$eventHub.$on('ZoomIn', data => {      
                 
-                let map1 = that.$refs.map;
-                map1.actions.flyTo({               
-                   center: data,
-                   zoom: 20,
-                   bearing: 0,
-                   speed: 0.2,
-                   curve: 1,
-                   easing: function(t) {return t;}
-                })
+                // let map1 = that.$refs.map;
+                // map1.actions.flyTo({               
+                //    center: data,
+                //    zoom: 20,
+                //    bearing: 0,
+                //    speed: 0.2,
+                //    curve: 1,
+                //    easing: function(t) {return t;}
+                // })
                
+               this.getGoogleStreetView(data);
                 //this.mapbox.showUserLocation(true);                  
            });
 
@@ -105,6 +117,61 @@
             onCancel() {                             
                 console.log("Loader Cancel "); 
             }, 
+            getGoogleStreetView(coor) {
+                // info: https://developers.google.com/maps/documentation/streetview/get-api-key
+                // secret: KeanZSFvgOIu7sHd3esJjzYfZ4c=
+                // key: AIzaSyDDXsU7L4COS6cYpxPCDVIj9z7pUuMIEpo 
+                // https://maps.googleapis.com/maps/api/streetview?location=41.403609,2.174448&size=456x456&key=YOUR_API_KEY
+
+                let loc = 'location=' + coor[1].toString() + ',' + coor[0].toString();
+                let size = '&size=456x456';
+                let key = '&key=' + 'AIzaSyDDXsU7L4COS6cYpxPCDVIj9z7pUuMIEpo';
+                let url = 'https://maps.googleapis.com/maps/api/streetview?' + loc + size + key;
+                let that = this;
+
+                axios.get(url).then((response) => {
+                                      
+                    //let y = response;      
+                    
+                    that.isImageAvailable = true;
+
+                    that.streetViewImage = "data:image/png;base64," + response;
+
+
+                    that.mapbox.methods.addControl();
+
+                    // How to display image??
+                    // this.setBase64(response.data, function(base64Img){
+                    //     let img = "<img src='"+ base64Img +"'>";
+                    //     that.streetViewImage = img;
+                    //     //$('#map_div').html(img);
+                    // });
+
+                    //that.isLoading = false;
+                                                        
+                }).catch(error => {
+                    
+                    console.log(error);
+
+                    that.isImageAvailable = false;
+
+                    //that.isLoading = false;
+
+                });
+            },
+            setBase64(url, callback) {
+                var xhr = new XMLHttpRequest();
+                xhr.responseType = 'blob';
+                xhr.onload = function() {
+                        var reader  = new FileReader();
+                        reader.onloadend = function () {
+                            callback(reader.result);
+                        }
+                        reader.readAsDataURL(xhr.response);
+                };
+                xhr.open('GET', url);
+                xhr.send();
+            },
             getMarkers() {     
                 
                let places = [];
@@ -175,6 +242,8 @@
         data() {
             return {
                 fullPage: true,
+                streetViewImage: '',
+                isImageAvailable: false,
                 isLoading: false,
                 accessToken: 'pk.eyJ1IjoianJlaXNzIiwiYSI6ImNqdW9hMmtwbjJ4OG00NG52eXd0d29nM24ifQ.1kVrEs5-wL96vqMvuTUI3w',  
                 //markers: this.getMarkers(),                 

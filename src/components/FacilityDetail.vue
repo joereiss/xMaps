@@ -85,6 +85,46 @@
             }, 
             getFacilityImages() {
 
+
+
+                //this.isLoading = true;
+                let that = this;
+                axios.defaults.headers.common['userType'] = 'admin' // for all requests
+                //axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+                //axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'http://localhost:3000';
+                //axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization';
+                //axios.defaults.headers.common['Access-Control-Allow-Methods'] = 'GET, POST, PUT, PATCH, POST, DELETE, OPTIONS';
+
+                //axios.defaults.withCredentials = true;
+                axios.defaults.crossDomain = true;
+
+                //axios.defaults.headers.post['Accepts'] = 'application/json';               
+                axios.defaults.headers.post['Accept'] = 'application/json';       
+                axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
+                 //axios.defaults.headers.headers.
+                // 'http://localhost:3000/getMailBatches'
+                axios.post( 'http://kitchen36xwebapi-dev.us-east-1.elasticbeanstalk.com/token' ,
+                    //{ params: {loginId: that.loginId, password: that.password}},                
+                     {"headers": {
+                                //"Access-Control-Allow-Origin" : '*',
+                                //"Access-Control-Allow-Headers" : 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
+                                "userName" : 'jreiss123',
+                                "password" : '1234567',
+                                "grant_type" : 'password'}
+                    }).then((response) => {
+                    console.log(response.data);                 
+                    //self.data = response.data;
+                    //this.isLoading = false;
+                    
+                }).catch(error => {
+                    
+                    console.log(error);
+                    //this.isLoading = false;
+                });
+
+
+
+
             },
             getFacilityDetail() {     
                 
