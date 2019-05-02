@@ -10,18 +10,27 @@
                              
           <MglMap ref="map" :accessToken="accessToken" :mapStyle="mapStyle"  @load="onMapLoad" >    
              <div v-for="(field, index) in markers" :key="index">  
-                 <MglMarker :coordinates="field.coor"  :color="field.color" :id="field.facid" :define-custom-id="field.facid" @added="markerAdded"/>                 
-             </div>       
+                 <MglMarker :coordinates="field.coor"  :color="field.color" :id="field.facid" :define-custom-id="field.facid" @added="markerAdded">                 
+                     <MglPopup :id="field.facid" @added="popupAdded">
+                        <div style="width: 458px; height: 458px;">                            
+                            <!-- <img v-bind:src='streetViewImageSource' alt='street view' height="456" width="456"> -->
+                            <img v-bind:src='streetViewImageSourceUrl' alt='street view' height="456" width="456">
+                        </div>
+                    </MglPopup>     
+                    <!-- <MglImage>
+                    </MglImage>  -->
+                 </MglMarker>
+             </div>      
+             <!-- <Streetview ref="streetViewImage"/> -->
+         </MglMap>   
 
+         <!-- <Streetview ref="streetViewImage"/> -->
 
-            <div id="streetView" v-if="isImageAvailable" style="z-index=100000">
-                <!-- <span v-html="streetViewImage"></span> -->
+          <!-- <div id="streetView"  ref="StreetviewImage"  v-if="isImageAvailable" style="z-index=100000">                
                 <h3>Google Image</h3>
                 <img src="streetViewImage" />
-            </div>
+          </div> -->
 
-
-         </MglMap>   
          
          
 
@@ -40,11 +49,15 @@
            
     import Mapbox from 'mapbox-gl-vue';
     import 'mapbox-gl/dist/mapbox-gl.css';   
-    import { MglMap, MglMarker } from "vue-mapbox";
+    import { MglMap, MglMarker, MglPopup, MglImage } from "vue-mapbox";
     import Loading from 'vue-loading-overlay';   
     import 'vue-loading-overlay/dist/vue-loading.css';
+
+    //import Streetview from './Streetview.vue';
    
     const axios = require('axios');
+
+    const zlib = require('zlib');
 
     export default {
       
@@ -70,8 +83,13 @@
                 //    curve: 1,
                 //    easing: function(t) {return t;}
                 // })
+
+                //let x = zlib;
                
-               this.getGoogleStreetView(data);
+               if (data !== undefined) {
+                  this.getGoogleStreetView(data);
+               }
+              
                 //this.mapbox.showUserLocation(true);                  
            });
 
@@ -105,7 +123,7 @@
         //mixins: [MockServer],
 
         components: {
-           MglMap, MglMarker,Loading           
+           MglMap, MglMarker,Loading,MglPopup//,MglImage //,Streetview           
         },
 
         props: {
@@ -127,6 +145,13 @@
                 let size = '&size=456x456';
                 let key = '&key=' + 'AIzaSyDDXsU7L4COS6cYpxPCDVIj9z7pUuMIEpo';
                 let url = 'https://maps.googleapis.com/maps/api/streetview?' + loc + size + key;
+                // let url = 'https://maps.googleapis.com/maps/api/streetview/metadata?' + loc + size + key;
+
+                this.streetViewImageSourceUrl = url;
+
+                return;
+
+
                 let that = this;
 
                 axios.get(url).then((response) => {
@@ -135,10 +160,33 @@
                     
                     that.isImageAvailable = true;
 
-                    that.streetViewImage = "data:image/png;base64," + response;
+                    //that.streetViewImage = "data:image/png;base64," + response.data;
+                    //that.streetViewImageSource = "data:image/png;base64," + response.data;
+
+                    //let u8 = new Uint8Array(response.data);
+                    //let b = btoa(u8);
+                    //let b = zlib.Inflate(response.data);
+                     //let b = zlib.Unzip(response.data);
+                     let b = zlib.Gunzip(response.data);
+                    
+                    
+                    //that.streetViewImageSource = "data:image/jpg;base64," + b._buffer[0] + b._buffer[1];
+                    that.streetViewImageSource = "data:image/jpg;base64," + response.data;
 
 
-                    that.mapbox.methods.addControl();
+                    //let b = Buffer.from(response.data, 'binary').toString('base64');
+                     //let b = Buffer.from(response.data).toString('base64');
+                     //let b = btoa(response.data);
+
+                    //that.streetViewImageSource = b;
+                    //that.streetViewImageSource = "data:image/jpeg;base64," + b;
+                    //that.streetViewImageSource = "data:image/jpg;base64," + b;
+                    //that.streetViewImageSource = "data:" + response.data;
+                    //that.streetViewImageSource = "data:image/jpeg," + b;
+                    //that.streetViewImageSource = "data:image/jpeg," + response.data;
+
+                    //let streetviewImage = that.$refs.streetViewImage;
+                    //that.mapbox.methods.addControls(streetviewImage);
 
                     // How to display image??
                     // this.setBase64(response.data, function(base64Img){
@@ -226,7 +274,23 @@
                         }       
                     });
                 });
-            },     
+            },    
+            
+            popupAdded(event) {
+               event.popup.remove();
+
+               //let el = event.popup.getElement();
+               //let el = event.component.getElement();
+            //    let el = event.component.$listeners;
+
+            //    el.addEventListener('open', (event) => { 
+            //        let x = event;
+            //    });
+
+               //event.popup.remove();
+
+            },
+
             // onMapLoaded(event) {
             //     this.isLoading = false;        
             //     console.log('map loaded');       
@@ -243,6 +307,8 @@
             return {
                 fullPage: true,
                 streetViewImage: '',
+                streetViewImageSource: '',
+                streetViewImageSourceUrl: '',
                 isImageAvailable: false,
                 isLoading: false,
                 accessToken: 'pk.eyJ1IjoianJlaXNzIiwiYSI6ImNqdW9hMmtwbjJ4OG00NG52eXd0d29nM24ifQ.1kVrEs5-wL96vqMvuTUI3w',  

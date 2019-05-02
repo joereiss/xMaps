@@ -16,7 +16,8 @@
     "vue-loading-overlay": "^3.2.0",
     "vue-mapbox": "^0.2.2",
     "vue2-google-maps": "^0.10.6",
-    "vuetify": "^1.5.12"
+    "vuetify": "^1.5.12",
+    "zlib": "^1.0.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.6.0",
