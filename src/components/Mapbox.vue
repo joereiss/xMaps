@@ -9,19 +9,50 @@
           </loading>
                              
           <MglMap ref="map" :accessToken="accessToken" :mapStyle="mapStyle"  @load="onMapLoad" >    
+             <!-- <mgl-navigation-control position="top-right"></mgl-navigation-control> -->
              <div v-for="(field, index) in markers" :key="index">  
                  <MglMarker :coordinates="field.coor"  :color="field.color" :id="field.facid" :define-custom-id="field.facid" @added="markerAdded">                 
-                     <MglPopup :id="field.facid" @added="popupAdded">
-                        <div style="width: 458px; height: 458px;">                            
-                            <!-- <img v-bind:src='streetViewImageSource' alt='street view' height="456" width="456"> -->
+                     <MglPopup :id="field.facid" showed="false"  @added="popupAdded">
+                        <div style="width: 458px; height: 458px;">                                                        
                             <img v-bind:src='streetViewImageSourceUrl' alt='street view' height="456" width="456">
                         </div>
-                    </MglPopup>     
-                    <!-- <MglImage>
-                    </MglImage>  -->
-                 </MglMarker>
+                    </MglPopup>                                         
+                 </MglMarker>                
              </div>      
-             <!-- <Streetview ref="streetViewImage"/> -->
+              <!-- <MglPopup :coordinates="popupCoor" v-if="isPopupVisible" anchor="top" @close="popupClosed">
+                       <div style="width: 458px; height: 458px;">     
+                           <VCard> <div>Hello, I'm popup!</div> </VCard>
+                       </div>                    
+             </MglPopup> -->
+             <!-- <div v-if="isPopupVisible">
+             <MglPopup :coordinates="popupCoor"  anchor="top" @close="popupClosed">
+                       <div style="width: 458px; height: 458px;">     
+                           <VCard> <div>Hello, I'm popup!</div> </VCard>
+                       </div>                    
+             </MglPopup>
+             </div> -->
+              <!-- <MglPopup :coordinates="popupCoor"  anchor="top" :visible="isPopupVisible" @close="popupClosed">
+                       <div style="width: 458px; height: 458px;">     
+                           <VCard> <div>Hello, I'm popup!</div> </VCard>
+                       </div>                    
+             </MglPopup> -->
+               <!-- <MglPopup :coordinates="popupCoor"  anchor="top" :isOpen="isPopupVisible" :visible="isPopupVisible" @close="popupClosed">
+                       <div style="width: 458px; height: 458px;">     
+                           <VCard> <div>Hello, I'm popup!</div> </VCard>
+                       </div>                    
+             </MglPopup> -->
+             <!-- <div id="mapPopup" style= "display: none;">
+             <MglPopup :coordinates="popupCoor"  anchor="top" @close="popupClosed">
+                       <div style="width: 458px; height: 458px;">     
+                           <VCard> <div>Hello, I'm popup!</div> </VCard>
+                       </div>                    
+             </MglPopup>
+             </div> -->
+              <!-- <MglPopup  ref="mapPopup" :coordinates="popupCoor"  anchor="top" @close="popupClosed">
+                       <div style="width: 458px; height: 458px;">     
+                           <VCard> <div>Hello, I'm popup!</div> </VCard>
+                       </div>                    
+             </MglPopup> -->
          </MglMap>   
 
          <!-- <Streetview ref="streetViewImage"/> -->
@@ -51,7 +82,9 @@
     import 'mapbox-gl/dist/mapbox-gl.css';   
     import { MglMap, MglMarker, MglPopup, MglImage } from "vue-mapbox";
     import Loading from 'vue-loading-overlay';   
-    import 'vue-loading-overlay/dist/vue-loading.css';
+    import 'vue-loading-overlay/dist/vue-loading.css';    
+    //import GeoPopup from './components/GeoPopup.vue';
+    //import GeoPopup from './components/GeoPopup.vue';
 
     //import Streetview from './Streetview.vue';
    
@@ -66,6 +99,7 @@
         created() {
            // We need to set mapbox-gl library here in order to use it in template
            this.mapbox = Mapbox;
+          
            let that = this;
 
            this.$eventHub.$on('Counts', data => {      
@@ -74,21 +108,26 @@
 
            this.$eventHub.$on('ZoomIn', data => {      
                 
-                // let map1 = that.$refs.map;
-                // map1.actions.flyTo({               
-                //    center: data,
-                //    zoom: 20,
-                //    bearing: 0,
-                //    speed: 0.2,
-                //    curve: 1,
-                //    easing: function(t) {return t;}
-                // })
-
-                //let x = zlib;
-               
-               if (data !== undefined) {
-                  this.getGoogleStreetView(data);
-               }
+                let map1 = that.$refs.map;
+                map1.actions.flyTo({               
+                   center: data,
+                   zoom: 20,
+                   bearing: 0,
+                   speed: 0.2,
+                   curve: 1,
+                   easing: function(t) {                      
+                       if (t === 1) {
+                            if (data !== undefined) {
+                                that.getGoogleStreetView(data);
+                            }
+                       }
+                       return t;
+                   }
+                })
+                           
+            //    if (data !== undefined) {
+            //       //this.getGoogleStreetView(data);
+            //    }
               
                 //this.mapbox.showUserLocation(true);                  
            });
@@ -107,13 +146,30 @@
                
                 //this.mapbox.showUserLocation(true);                  
            });
+
+        //    this.mapbox.on('moveend',function(move) {              
+        //       let x = 1;
+        //       let y = 1;
+        //    });
           
         },
         mounted() {
 
             //this.markers =  this.getResidentCountsPerBuilding();
-            this.getResidentCountsPerBuilding();
            
+        //    this.mapbox.Popup({closeOnClick: false})
+        //     .setLngLat([-96, 37.8])
+        //     .setHTML('<h1>Hello World!</h1>')
+        //     .addTo(map);
+
+
+            // this.$refs.map.Popup({closeOnClick: false})
+            // .setLngLat([-96, 37.8])
+            // .setHTML('<h1>Hello World!</h1>')
+            // .addTo(this.$refs.map);
+
+           this.getResidentCountsPerBuilding();
+           //this.isPopupVisible = false;
         },
 
         beforeDestroy () {
@@ -131,6 +187,36 @@
             //    type: String
             //}
         },   
+
+       watch: {
+            'isPopupVisible': {               
+                handler(n, o) {
+
+                    if (this.$refs.mapPopup === undefined) {
+                        return;
+                    }
+
+                    if (n === true) {
+                      //this.$refs.mapPopup.addTo(this.mapbox);
+                       //let x = new this.mapbox.Popup()
+
+                       //this.$refs.mapPopup.$_addPopup(this.mapbox);
+                         this.$refs.mapPopup.$_addPopup(this.$refs.map);
+
+                       //this.$refs.mapPopup.popup.addTo(this.map);
+                    } 
+                    else  {
+                      this.$refs.mapPopup.remove();
+                    }     
+                    //@click.stop="clickfunction($event)"     
+                    //@click.prevent="action"
+                    //@submit.prevent="action"        
+                },
+                //deep: true
+            }
+        },
+
+
          methods: {                     
             onCancel() {                             
                 console.log("Loader Cancel "); 
@@ -151,6 +237,7 @@
 
                 return;
 
+                // looks like just setting the url works - no need to make axios call.
 
                 let that = this;
 
@@ -249,6 +336,9 @@
                      
                     that.markers = JSON.parse(buildings);
                     that.isLoading = false;
+
+
+                    this.isPopupVisible = false;
                                                         
                 }).catch(error => {
                     
@@ -270,9 +360,22 @@
                     that.markers.find(function(facility) {
                         if (facility.facid == facid) {
                             that.isLoading = false;
+                            that.popupCoor = facility.coor;
+
+                            that.isPopupVisible = true;
+                            //that.isPopupVisible = false;
+                            //let div = document.getElementById("mapPopup");
+                            //div.style.display = "block";
+                           //let p = new that.MglPopup();
+                           //p.setLngLat(facility.coor);
+                           //p.addTo(that.mapbox);
+
+
+
+
                             that.$eventHub.$emit('FacilityDetail', facility);                           
                         }       
-                    });
+                    });                
                 });
             },    
             
@@ -291,6 +394,11 @@
 
             },
 
+            popupClosed(event) {
+                
+                //this.isPopupVisible = false;
+            },
+
             // onMapLoaded(event) {
             //     this.isLoading = false;        
             //     console.log('map loaded');       
@@ -300,12 +408,17 @@
                 const asyncActions = event.component.actions;
 
                 this.isLoading = false;   
+
+                //this.isPopupVisible = false;
+
                 console.log('map loaded - ' + asyncActions);                  
             }                                   
         },       
         data() {
             return {
-                fullPage: true,
+                fullPage: true,            
+                popupCoor: [0,0],
+                isPopupVisible: '',  //false - set to empty string so the watcher get intially triggered when setting to false
                 streetViewImage: '',
                 streetViewImageSource: '',
                 streetViewImageSourceUrl: '',

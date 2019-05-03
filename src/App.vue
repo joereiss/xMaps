@@ -26,6 +26,7 @@
     <v-content style="padding: 0px;" app>
       <v-container fluid style="padding: 0px;">  
          <Mapbox class="mapElement" style="cursor: pointer;"/>    
+          <!-- <CesiumMap/>     -->
       </v-container> 
 
       <v-footer app height="auto" style="background-color: #424242;">       
@@ -47,13 +48,14 @@
 <script>
 
 import Mapbox from './components/Mapbox.vue';
+import CesiumMap from './components/CesiumMap.vue';
 import FacilityDetail from './components/FacilityDetail.vue';
 import MapControls from './components/MapControls.vue';
 
 export default {
   name: 'app',
   components: {
-    FacilityDetail,MapControls,Mapbox
+    FacilityDetail,MapControls,Mapbox,CesiumMap
   },
   data () {
     return {
